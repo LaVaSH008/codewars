@@ -1,7 +1,6 @@
-from methods.vowelCount import get_count
+from methods.kuy5.validParentheses import valid_parentheses
+from methods.kyu7.find_next_square import find_next_square
 
 
 if __name__ == '__main__':
-    #pig_it('Quis custodiet ipsos custodes ?')
-    i = get_count('abracadabra')
-    print(i)
+    print(find_next_square(121))
