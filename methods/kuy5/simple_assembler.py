@@ -1,48 +1,29 @@
-from typing import Optional
-
-
-def mov(args: list, all: Optional[list]):
-    try:
-        globals()[args[1]] = int(args[2])
-    except ValueError:
-        globals()[args[1]] = int(globals()[args[2]])
-    globals()['result'].update({args[1]: int(globals()[args[1]])})
-
-
-def inc(args: list, all: Optional[list]):
-    globals()[args[1]] += 1
-    globals()['result'].update({args[1]: int(globals()[args[1]])})
-
-
-def dec(args: list, all: Optional[list]):
-    globals()[args[1]] -= 1
-    globals()['result'].update({args[1]: int(globals()[args[1]])})
-
-
-def jnz(args: list, all: Optional[list]):
-    op_index = all.index(args)
-
-    if int(args[2]) < 0:
-        while globals()[args[1]] > 0:
-            for i in range(op_index + int(args[2]), op_index):
-                globals()[all[i][0]](all[i], all)
-    else:
-        return int(args[2]) - 1
-
-
 def simple_assembler(program):
-    s = [i.split(' ') for i in program]
-    globals()['result'] = {}
-    step_skip: int = None
+    result = {}
+    count = 0
 
-    for i in s:
-        if step_skip is not None and not step_skip == 0:
-            step_skip -= 1
-            continue
+    while count < len(program):
+        command, var, attr = (program[count] + ' 0').split(' ')[:3]
 
-        if i[1] not in globals():
-            globals()[i[1]] = 0
+        if command == 'inc':
+            result[var] += 1
 
-        step_skip = globals()[i[0]](i, s)
+        if command == 'dec':
+            result[var] -= 1
 
-    return globals()['result']
+        if command == 'mov':
+            if attr in result:
+                result[var] = result[attr]
+            else:
+                result[var] = int(attr)
+
+        if command == 'jnz':
+            if var in result:
+                if result[var]:
+                    count += int(attr) - 1
+            elif int(var):
+                count += int(attr) - 1
+
+        count += 1
+
+    return result
