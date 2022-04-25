@@ -12,4 +12,4 @@ from methods.kyu4.range_extraction import solution
 
 if __name__ == '__main__':
 
-    print(nth_fib(5))
+    print(rot13('EBG13 rknzcyr.'))
